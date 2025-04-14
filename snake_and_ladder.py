@@ -22,3 +22,21 @@ BOARD_SIZE = 10
 CELL_SIZE = 50
 PLAYER_SIZE = 20
 DICE_SIZE = 50
+
+# Ladders (start, end)
+ladders = {
+    3: 22,
+    5: 8,
+    11: 26,
+    20: 29,
+    17: 4,  
+    27: 1   
+}
+
+# Snakes (start, end)
+snakes = {
+    17: 4,
+    19: 7,
+    21: 9,
+    27: 1
+}
