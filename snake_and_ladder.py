@@ -40,3 +40,15 @@ snakes = {
     21: 9,
     27: 1
 }
+
+# Player positions
+players = {
+    "Player 1": {"pos": 0, "color": RED},
+    "Player 2": {"pos": 0, "color": BLUE}
+}
+current_player = "Player 1"
+
+# Dice
+dice_value = 1
+dice_rolling = False
+roll_start_time = 0
