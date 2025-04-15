@@ -97,3 +97,16 @@ def draw_board():
             pygame.draw.line(screen, GREEN, 
                            (x - dy/15, y + dx/15),
                            (x + dy/15, y - dx/15), 3)
+            
+
+# Draw snakes
+    for start, end in snakes.items():
+        start_pos = get_board_position(start)
+        end_pos = get_board_position(end)
+        pygame.draw.line(screen, RED, start_pos, end_pos, 5)
+        # Draw snake head
+        direction = (end_pos[0] - start_pos[0], end_pos[1] - start_pos[1])
+        length = (direction[0]**2 + direction[1]**2)**0.5
+        unit = (direction[0]/length, direction[1]/length)
+        head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
+        pygame.draw.circle(screen, RED, head, 8)
