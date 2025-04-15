@@ -63,3 +63,22 @@ def get_board_position(cell):
     x = 100 + col * CELL_SIZE + CELL_SIZE//2
     y = 50 + row * CELL_SIZE + CELL_SIZE//2
     return x, y
+
+def draw_board():
+    """Draw the Snakes & Ladders board"""
+    screen.fill(WHITE)
+
+# Draw grid
+    for i in range(100):
+        row = 9 - i // 10
+        col = i % 10
+        if row % 2 == 1:
+            col = 9 - col
+        x = 100 + col * CELL_SIZE
+        y = 50 + row * CELL_SIZE
+        pygame.draw.rect(screen, BLACK, (x, y, CELL_SIZE, CELL_SIZE), 1)
+        
+        # Draw cell numbers
+        font = pygame.font.SysFont(None, 20)
+        text = font.render(str(i+1), True, BLACK)
+        screen.blit(text, (x + 5, y + 5))
