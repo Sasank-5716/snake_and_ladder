@@ -119,3 +119,22 @@ def draw_dice():
         value = random.randint(1, 6)
     else:
         value = dice_value
+
+    # Draw dice dots
+    dot_positions = {
+        1: [(DICE_SIZE//2, DICE_SIZE//2)],
+        2: [(DICE_SIZE//4, DICE_SIZE//4), (3*DICE_SIZE//4, 3*DICE_SIZE//4)],
+        3: [(DICE_SIZE//4, DICE_SIZE//4), (DICE_SIZE//2, DICE_SIZE//2), (3*DICE_SIZE//4, 3*DICE_SIZE//4)],
+        4: [(DICE_SIZE//4, DICE_SIZE//4), (3*DICE_SIZE//4, DICE_SIZE//4),
+            (DICE_SIZE//4, 3*DICE_SIZE//4), (3*DICE_SIZE//4, 3*DICE_SIZE//4)],
+        5: [(DICE_SIZE//4, DICE_SIZE//4), (3*DICE_SIZE//4, DICE_SIZE//4),
+            (DICE_SIZE//2, DICE_SIZE//2),
+            (DICE_SIZE//4, 3*DICE_SIZE//4), (3*DICE_SIZE//4, 3*DICE_SIZE//4)],
+        6: [(DICE_SIZE//4, DICE_SIZE//4), (3*DICE_SIZE//4, DICE_SIZE//4),
+            (DICE_SIZE//4, DICE_SIZE//2), (3*DICE_SIZE//4, DICE_SIZE//2),
+            (DICE_SIZE//4, 3*DICE_SIZE//4), (3*DICE_SIZE//4, 3*DICE_SIZE//4)]
+    }
+    
+    for pos in dot_positions[value]:
+        pygame.draw.circle(screen, WHITE, 
+                         (WIDTH - 100 + pos[0], HEIGHT - 100 + pos[1]), 4)
