@@ -82,3 +82,18 @@ def draw_board():
         font = pygame.font.SysFont(None, 20)
         text = font.render(str(i+1), True, BLACK)
         screen.blit(text, (x + 5, y + 5))
+
+# Draw ladders
+    for start, end in ladders.items():
+        start_pos = get_board_position(start)
+        end_pos = get_board_position(end)
+        pygame.draw.line(screen, GREEN, start_pos, end_pos, 5)
+        # Draw ladder rungs
+        dx = end_pos[0] - start_pos[0]
+        dy = end_pos[1] - start_pos[1]
+        for i in range(1, 4):
+            x = start_pos[0] + dx*i/4
+            y = start_pos[1] + dy*i/4
+            pygame.draw.line(screen, GREEN, 
+                           (x - dy/15, y + dx/15),
+                           (x + dy/15, y - dx/15), 3)
