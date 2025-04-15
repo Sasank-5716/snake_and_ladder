@@ -110,3 +110,12 @@ def draw_board():
         unit = (direction[0]/length, direction[1]/length)
         head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
         pygame.draw.circle(screen, RED, head, 8)
+
+
+def draw_dice():
+    """Draw the dice and current value"""
+    pygame.draw.rect(screen, BLACK, (WIDTH - 100, HEIGHT - 100, DICE_SIZE, DICE_SIZE))
+    if dice_rolling:
+        value = random.randint(1, 6)
+    else:
+        value = dice_value
