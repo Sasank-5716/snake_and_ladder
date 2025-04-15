@@ -52,3 +52,14 @@ current_player = "Player 1"
 dice_value = 1
 dice_rolling = False
 roll_start_time = 0
+
+# Helper functions
+def get_board_position(cell):
+    """Convert cell number to screen coordinates"""
+    row = 9 - (cell-1) // BOARD_SIZE
+    col = (cell-1) % BOARD_SIZE
+    if row % 2 == 1:
+        col = 9 - col
+    x = 100 + col * CELL_SIZE + CELL_SIZE//2
+    y = 50 + row * CELL_SIZE + CELL_SIZE//2
+    return x, y
