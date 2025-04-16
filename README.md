@@ -21,16 +21,16 @@ Python 3.x
 Pygame library
 
 ## Setup Instructions
-1. Clone this repository:
+Clone this repository:
 git clone https://https://github.com/Sasank-5716/snake_and_ladder.git
 cd snakes-and-ladders-pygame
 
-2. Install dependencies:
+Install dependencies:
 pip install -r requirements.txt
 (Ensure you have Python and pip installed)
 
-3. Run the game:
-4. python main.py
+Run the game:
+python main.py
 
 ## How to Play
 - Click on the dice to roll it.
