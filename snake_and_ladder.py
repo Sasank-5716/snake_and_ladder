@@ -138,3 +138,17 @@ def draw_dice():
     for pos in dot_positions[value]:
         pygame.draw.circle(screen, WHITE, 
                          (WIDTH - 100 + pos[0], HEIGHT - 100 + pos[1]), 4)
+        
+def handle_movement(player, steps):
+    global current_player
+    players[player]["pos"] += steps
+    
+    if players[player]["pos"] in ladders:
+        players[player]["pos"] = ladders[players[player]["pos"]]
+    elif players[player]["pos"] in snakes:
+        players[player]["pos"] = snakes[players[player]["pos"]]
+    
+    if players[player]["pos"] >= 100:
+        show_winner(player)
+    else:
+        current_player = "Player 2" if current_player == "Player 1" else "Player 1"
