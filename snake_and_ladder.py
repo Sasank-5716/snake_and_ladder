@@ -169,3 +169,18 @@ def show_winner(player):
         pygame.display.flip()
         clock.tick(30)
 
+def handle_events():
+    global dice_rolling, roll_start_time, dice_value
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+            
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            if (WIDTH - 100 <= x <= WIDTH - 50 and 
+                HEIGHT - 100 <= y <= HEIGHT - 50):
+                if not dice_rolling:
+                    dice_rolling = True
+                    roll_start_time = pygame.time.get_ticks()
