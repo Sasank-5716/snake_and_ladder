@@ -152,3 +152,20 @@ def handle_movement(player, steps):
         show_winner(player)
     else:
         current_player = "Player 2" if current_player == "Player 1" else "Player 1"
+
+def show_winner(player):
+    font = pygame.font.SysFont(None, 72)
+    text = font.render(f"{player} Wins!", True, players[player]["color"])
+    text_rect = text.get_rect(center=(WIDTH//2, HEIGHT//2))
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        
+        screen.fill(WHITE)
+        screen.blit(text, text_rect)
+        pygame.display.flip()
+        clock.tick(30)
+
