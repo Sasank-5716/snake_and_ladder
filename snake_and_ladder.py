@@ -184,3 +184,25 @@ def handle_events():
                 if not dice_rolling:
                     dice_rolling = True
                     roll_start_time = pygame.time.get_ticks()
+
+while True:
+    handle_events()
+    
+    # Dice rolling animation
+    if dice_rolling:
+        if pygame.time.get_ticks() - roll_start_time > 1000:
+            dice_rolling = False
+            dice_value = random.randint(1, 6)
+            handle_movement(current_player, dice_value)
+    
+    # Drawing
+    draw_board()
+    draw_dice()
+    
+    # UI Elements
+    font = pygame.font.SysFont(None, 36)
+    turn_text = font.render(f"{current_player}'s Turn", True, BLACK)
+    screen.blit(turn_text, (50, HEIGHT - 50))
+    
+    pygame.display.flip()
+    clock.tick(30)
