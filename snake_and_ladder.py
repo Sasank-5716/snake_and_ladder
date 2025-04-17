@@ -152,6 +152,27 @@ animation_current = 0
 animation_player = ""
 animation_path = []
         
+
+def draw_ui():
+    """Draw user interface elements"""
+    # Current player indicator
+    font = pygame.font.SysFont(None, 36)
+    turn_text = font.render(f"{current_player}'s Turn", True, players[current_player]["color"])
+    screen.blit(turn_text, (50, HEIGHT - 50))
+    
+    # Player info indicators
+    p1_text = font.render("Player 1", True, BLUE)
+    screen.blit(p1_text, (50, 30))
+    pygame.draw.circle(screen, BLUE, (150, 40), PLAYER_SIZE)
+    
+    p2_text = font.render("Player 2", True, YELLOW)
+    screen.blit(p2_text, (50, 70))
+    pygame.draw.circle(screen, YELLOW, (150, 80), PLAYER_SIZE)
+    
+    # Dice label
+    dice_label = font.render("Roll:", True, BLACK)
+    screen.blit(dice_label, (WIDTH - 150, HEIGHT - 70))
+
 def handle_movement(player, steps):
     global current_player, animating, animation_start, animation_steps, animation_player, animation_path
     
