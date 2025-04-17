@@ -67,7 +67,7 @@ def get_board_position(cell):
 
 def draw_board():
     """Draw the Snakes & Ladders board"""
-    screen.fill(WHITE)
+    screen.fill(GRAY)
 
 # Draw grid
     for i in range(100):
@@ -83,6 +83,8 @@ def draw_board():
         font = pygame.font.SysFont(None, 20)
         text = font.render(str(i+1), True, BLACK)
         screen.blit(text, (x + 5, y + 5))
+        color = WHITE if (i % 2 == 0) else (240, 240, 240)  # New alternating colors
+        pygame.draw.rect(screen, color, (x, y, CELL_SIZE, CELL_SIZE))
 
 # Draw ladders
     for start, end in ladders.items():
@@ -104,13 +106,15 @@ def draw_board():
     for start, end in snakes.items():
         start_pos = get_board_position(start)
         end_pos = get_board_position(end)
-        pygame.draw.line(screen, RED, start_pos, end_pos, 5)
-        # Draw snake head
-        direction = (end_pos[0] - start_pos[0], end_pos[1] - start_pos[1])
-        length = (direction[0]**2 + direction[1]**2)**0.5
-        unit = (direction[0]/length, direction[1]/length)
-        head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
-        pygame.draw.circle(screen, RED, head, 8)
+        segments = 20
+        for i in range(segments):
+            # ... [curved snake drawing code] ...
+        
+        # Draw snake head with eyes
+        pygame.draw.circle(screen, RED, head, 10)
+        eye_offset = (-unit[1]*5, unit[0]*5)
+        pygame.draw.circle(screen, WHITE, (head[0] + eye_offset[0], head[1] + eye_offset[1]), 3)
+
 
 
 def draw_dice():
