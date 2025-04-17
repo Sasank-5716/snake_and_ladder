@@ -119,7 +119,9 @@ def draw_board():
 
 def draw_dice():
     """Draw the dice and current value"""
-    pygame.draw.rect(screen, BLACK, (WIDTH - 100, HEIGHT - 100, DICE_SIZE, DICE_SIZE))
+    pygame.draw.rect(screen, BLACK, (WIDTH - 100, HEIGHT - 100, DICE_SIZE, DICE_SIZE), 0, 10)  # Added rounded corners
+    pygame.draw.rect(screen, WHITE, (WIDTH - 95, HEIGHT - 95, DICE_SIZE-10, DICE_SIZE-10), 0, 5)
+    
     if dice_rolling:
         value = random.randint(1, 6)
     else:
