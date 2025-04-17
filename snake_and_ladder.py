@@ -140,19 +140,39 @@ def draw_dice():
         pygame.draw.circle(screen, WHITE, 
                          (WIDTH - 100 + pos[0], HEIGHT - 100 + pos[1]), 4)
         
+
+animating = False
+animation_start = 0
+animation_steps = 0
+animation_current = 0
+animation_player = ""
+animation_path = []
+        
 def handle_movement(player, steps):
-    global current_player
+    global current_player, animating, animation_start, animation_steps, animation_player, animation_path
+    
+    animating = True
+    animation_start = pygame.time.get_ticks()
+    animation_steps = steps
+    animation_current = 0
+    animation_player = player
+    animation_path = []
     players[player]["pos"] += steps
     
-    if players[player]["pos"] in ladders:
-        players[player]["pos"] = ladders[players[player]["pos"]]
-    elif players[player]["pos"] in snakes:
-        players[player]["pos"] = snakes[players[player]["pos"]]
+     # Create path for animation
+    current_pos = players[player]["pos"]
+    for step in range(1, steps + 1):
+        new_pos = current_pos + step
+        if new_pos > 100:
+            new_pos = 100 - (new_pos - 100)  # Bounce back if over 100
+        animation_path.append(new_pos)
     
-    if players[player]["pos"] >= 100:
-        show_winner(player)
-    else:
-        current_player = "Player 2" if current_player == "Player 1" else "Player 1"
+    # Check for snake or ladder at final position
+    final_pos = players[player]["pos"] + steps
+    if final_pos in ladders:
+        animation_path.append(ladders[final_pos])
+    elif final_pos in snakes:
+        animation_path.append(snakes[final_pos])
 
 def show_winner(player):
     font = pygame.font.SysFont(None, 72)
