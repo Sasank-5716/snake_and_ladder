@@ -23,6 +23,11 @@ CELL_SIZE = 50
 PLAYER_SIZE = 20
 DICE_SIZE = 50
 
+players = {
+    "Player 1": {"pos": 1, "color": BLUE},  # Changed from RED to BLUE
+    "Player 2": {"pos": 1, "color": YELLOW}  # Changed from BLUE to YELLOW
+}
+
 # Ladders (start, end)
 ladders = {
     3: 22,
