@@ -25,8 +25,8 @@ PLAYER_SIZE = 20
 DICE_SIZE = 50
 
 players = {
-    "Player 1": {"pos": 1, "color": BLUE},  # Changed from RED to BLUE
-    "Player 2": {"pos": 1, "color": YELLOW}  # Changed from BLUE to YELLOW
+    "Player 1": {"pos": 1, "color": BLUE},  
+    "Player 2": {"pos": 1, "color": YELLOW} 
 }
 
 # Ladders (start, end)
@@ -43,11 +43,6 @@ snakes = {
     89: 68,  92: 88,  95: 75,  99: 5 
 }
 
-# Player positions
-players = {
-    "Player 1": {"pos": 0, "color": RED},
-    "Player 2": {"pos": 0, "color": BLUE}
-}
 current_player = "Player 1"
 
 # Dice
@@ -216,25 +211,28 @@ def handle_movement(player, steps):
     animation_current = 0
     animation_player = player
     animation_path = []
+    start_pos = players[player]["pos"]
     players[player]["pos"] += steps
     
      # Create path for animation
     current_pos = players[player]["pos"]
     for step in range(1, steps + 1):
-        new_pos = current_pos + step
+        new_pos = start_pos + step  # Start from the saved starting position
         if new_pos > 100:
             new_pos = 100 - (new_pos - 100)  # Bounce back if over 100
         animation_path.append(new_pos)
     
     # Check for snake or ladder at final position
-    final_pos = players[player]["pos"] + steps
+    final_pos = players[player]["pos"]
     if final_pos in ladders:
-        animation_path.append(ladders[final_pos])
+        players[player]["pos"] = ladders[final_pos]  # Move player to ladder end
+        animation_path.append(ladders[final_pos]) # Add ladder end to path
     elif final_pos in snakes:
-        animation_path.append(snakes[final_pos])
+        players[player]["pos"] = snakes[final_pos]  # Move player to snake end
+        animation_path.append(snakes[final_pos]) # Add snake end to path
 
 def update_animation():
-    global animating, animation_current, current_player, dice_value
+    global animating, animation_start, animation_current, current_player, dice_value
     
     if pygame.time.get_ticks() - animation_start > 300:  # 300ms per step
         animation_start = pygame.time.get_ticks()
@@ -252,7 +250,7 @@ def update_animation():
             else:
                 # Switch player
                 current_player = "Player 2" if current_player == "Player 1" else "Player 1"
-                dice_value = 1
+                
 
 def show_winner(player):
     font = pygame.font.SysFont(None, 72)
@@ -317,6 +315,10 @@ while True:
             dice_value = random.randint(1, 6)
             handle_movement(current_player, dice_value)
     
+    # Handle movement animation
+    if animating:
+        update_animation()
+
     # Drawing
     draw_board()
     draw_players()
