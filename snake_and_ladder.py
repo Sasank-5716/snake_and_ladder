@@ -108,7 +108,9 @@ def draw_board():
         end_pos = get_board_position(end)
         segments = 20
         for i in range(segments):
-            # ... [curved snake drawing code] ...
+            x = start_pos[0] + (end_pos[0] - start_pos[0]) * i / segments
+            y = start_pos[1] + (end_pos[1] - start_pos[1]) * i / segments
+            pygame.draw.circle(screen, RED, (int(x), int(y)), 5)
         
         # Draw snake head with eyes
         pygame.draw.circle(screen, RED, head, 10)
