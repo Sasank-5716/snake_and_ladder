@@ -259,16 +259,37 @@ def show_winner(player):
     text = font.render(f"{player} Wins!", True, players[player]["color"])
     text_rect = text.get_rect(center=(WIDTH//2, HEIGHT//2))
     
-    while True:
+    restart_font = pygame.font.SysFont(None, 36)
+    restart_text = restart_font.render("Click to play again", True, BLACK)
+    restart_rect = restart_text.get_rect(center=(WIDTH//2, HEIGHT//2 + 50))
+    
+    waiting = True
+    while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                waiting = False
+                reset_game()
         
         screen.fill(WHITE)
         screen.blit(text, text_rect)
+        screen.blit(restart_text, restart_rect)
         pygame.display.flip()
         clock.tick(30)
+
+def reset_game():
+    global players, current_player, dice_value, dice_rolling, animating
+    
+    players = {
+        "Player 1": {"pos": 1, "color": BLUE},
+        "Player 2": {"pos": 1, "color": YELLOW}
+    }
+    current_player = "Player 1"
+    dice_value = 1
+    dice_rolling = False
+    animating = False
 
 def handle_events():
     global dice_rolling, roll_start_time, dice_value
