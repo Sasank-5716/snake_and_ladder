@@ -55,6 +55,14 @@ dice_value = 1
 dice_rolling = False
 roll_start_time = 0
 
+# Animation variables
+animating = False
+animation_start = 0
+animation_steps = 0
+animation_current = 0
+animation_player = ""
+animation_path = []
+
 # Helper functions
 def get_board_position(cell):
     """Convert cell number to screen coordinates"""
@@ -107,33 +115,31 @@ def draw_board():
     for start, end in snakes.items():
         start_pos = get_board_position(start)
         end_pos = get_board_position(end)
+        segments = 20
+        for i in range(segments):
+            t1 = i/segments
+            t2 = (i+1)/segments
+                
+            mid_t = (t1 + t2)/2
+            offset = 10 * (1 - 2*abs(mid_t - 0.5))
+                
+            x1 = start_pos[0] + (end_pos[0]-start_pos[0])*t1
+            y1 = start_pos[1] + (end_pos[1]-start_pos[1])*t1 + offset
+                
+            x2 = start_pos[0] + (end_pos[0]-start_pos[0])*t2
+            y2 = start_pos[1] + (end_pos[1]-start_pos[1])*t2 + offset
+                
+            pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 8)
         # Calculate direction vector
         direction = (end_pos[0] - start_pos[0], end_pos[1] - start_pos[1])
         length = (direction[0]**2 + direction[1]**2)**0.5
         if length > 0:  # Avoid division by zero
             unit = (direction[0]/length, direction[1]/length)
-
-        segments = 20
-        for i in range(segments):
-                t1 = i/segments
-                t2 = (i+1)/segments
-                
-                mid_t = (t1 + t2)/2
-                offset = 10 * (1 - 2*abs(mid_t - 0.5))
-                
-                x1 = start_pos[0] + (end_pos[0]-start_pos[0])*t1
-                y1 = start_pos[1] + (end_pos[1]-start_pos[1])*t1 + offset
-                
-                x2 = start_pos[0] + (end_pos[0]-start_pos[0])*t2
-                y2 = start_pos[1] + (end_pos[1]-start_pos[1])*t2 + offset
-                
-                pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 8)
-        
-        # Draw snake head with eyes
-        head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
-        pygame.draw.circle(screen, RED, head, 10)
-        eye_offset = (-unit[1]*5, unit[0]*5)
-        pygame.draw.circle(screen, WHITE, (head[0] + eye_offset[0], head[1] + eye_offset[1]), 3)
+            # Draw snake head with eyes
+            head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
+            pygame.draw.circle(screen, RED, head, 10)
+            eye_offset = (-unit[1]*5, unit[0]*5)
+            pygame.draw.circle(screen, WHITE, (head[0] + eye_offset[0], head[1] + eye_offset[1]), 3)
 
 
 
@@ -177,13 +183,8 @@ def draw_players():
             offset = 10 if i == 0 else -10
             pygame.draw.circle(screen, color, (x + offset, y), PLAYER_SIZE)
             pygame.draw.circle(screen, BLACK, (x + offset, y), PLAYER_SIZE, 1)
-            
-animating = False
-animation_start = 0
-animation_steps = 0
-animation_current = 0
-animation_player = ""
-animation_path = []
+
+
         
 
 def draw_ui():
@@ -232,6 +233,27 @@ def handle_movement(player, steps):
     elif final_pos in snakes:
         animation_path.append(snakes[final_pos])
 
+def update_animation():
+    global animating, animation_current, current_player, dice_value
+    
+    if pygame.time.get_ticks() - animation_start > 300:  # 300ms per step
+        animation_start = pygame.time.get_ticks()
+        animation_current += 1
+        
+        if animation_current < len(animation_path):
+            players[animation_player]["pos"] = animation_path[animation_current]
+        else:
+            # Animation complete
+            animating = False
+            final_pos = players[animation_player]["pos"]
+            
+            if final_pos >= 100:
+                show_winner(animation_player)
+            else:
+                # Switch player
+                current_player = "Player 2" if current_player == "Player 1" else "Player 1"
+                dice_value = 1
+
 def show_winner(player):
     font = pygame.font.SysFont(None, 72)
     text = font.render(f"{player} Wins!", True, players[player]["color"])
@@ -276,6 +298,7 @@ while True:
     
     # Drawing
     draw_board()
+    draw_players()
     draw_dice()
     
     # UI Elements
