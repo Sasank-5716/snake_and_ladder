@@ -16,6 +16,7 @@ GREEN = (0, 128, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+GRAY = (200, 200, 200)
 
 # Game Constants
 BOARD_SIZE = 10
@@ -77,14 +78,14 @@ def draw_board():
             col = 9 - col
         x = 100 + col * CELL_SIZE
         y = 50 + row * CELL_SIZE
+        color = WHITE if (i % 2 == 0) else (240, 240, 240)
+        pygame.draw.rect(screen, color, (x, y, CELL_SIZE, CELL_SIZE))
         pygame.draw.rect(screen, BLACK, (x, y, CELL_SIZE, CELL_SIZE), 1)
         
         # Draw cell numbers
         font = pygame.font.SysFont(None, 20)
         text = font.render(str(i+1), True, BLACK)
         screen.blit(text, (x + 5, y + 5))
-        color = WHITE if (i % 2 == 0) else (240, 240, 240)  # New alternating colors
-        pygame.draw.rect(screen, color, (x, y, CELL_SIZE, CELL_SIZE))
 
 # Draw ladders
     for start, end in ladders.items():
@@ -106,13 +107,30 @@ def draw_board():
     for start, end in snakes.items():
         start_pos = get_board_position(start)
         end_pos = get_board_position(end)
+        # Calculate direction vector
+        direction = (end_pos[0] - start_pos[0], end_pos[1] - start_pos[1])
+        length = (direction[0]**2 + direction[1]**2)**0.5
+        if length > 0:  # Avoid division by zero
+            unit = (direction[0]/length, direction[1]/length)
+
         segments = 20
         for i in range(segments):
-            x = start_pos[0] + (end_pos[0] - start_pos[0]) * i / segments
-            y = start_pos[1] + (end_pos[1] - start_pos[1]) * i / segments
-            pygame.draw.circle(screen, RED, (int(x), int(y)), 5)
+                t1 = i/segments
+                t2 = (i+1)/segments
+                
+                mid_t = (t1 + t2)/2
+                offset = 10 * (1 - 2*abs(mid_t - 0.5))
+                
+                x1 = start_pos[0] + (end_pos[0]-start_pos[0])*t1
+                y1 = start_pos[1] + (end_pos[1]-start_pos[1])*t1 + offset
+                
+                x2 = start_pos[0] + (end_pos[0]-start_pos[0])*t2
+                y2 = start_pos[1] + (end_pos[1]-start_pos[1])*t2 + offset
+                
+                pygame.draw.line(screen, RED, (x1, y1), (x2, y2), 8)
         
         # Draw snake head with eyes
+        head = (end_pos[0] - unit[0]*20, end_pos[1] - unit[1]*20)
         pygame.draw.circle(screen, RED, head, 10)
         eye_offset = (-unit[1]*5, unit[0]*5)
         pygame.draw.circle(screen, WHITE, (head[0] + eye_offset[0], head[1] + eye_offset[1]), 3)
