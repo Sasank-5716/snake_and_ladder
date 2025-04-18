@@ -163,10 +163,21 @@ def draw_dice():
     }
     
     for pos in dot_positions[value]:
-        pygame.draw.circle(screen, WHITE, 
+        pygame.draw.circle(screen, BLACK, 
                          (WIDTH - 100 + pos[0], HEIGHT - 100 + pos[1]), 4)
         
-
+def draw_players():
+    """Draw the players on the board"""
+    for i, (player, data) in enumerate(players.items()):
+        pos = data["pos"]
+        color = data["color"]
+        if pos > 0 and pos <= 100:  # Only draw if position is valid
+            x, y = get_board_position(pos)
+            # Offset players slightly
+            offset = 10 if i == 0 else -10
+            pygame.draw.circle(screen, color, (x + offset, y), PLAYER_SIZE)
+            pygame.draw.circle(screen, BLACK, (x + offset, y), PLAYER_SIZE, 1)
+            
 animating = False
 animation_start = 0
 animation_steps = 0
