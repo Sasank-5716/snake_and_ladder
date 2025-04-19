@@ -230,6 +230,7 @@ def handle_movement(player, steps):
     elif final_pos in snakes:
         players[player]["pos"] = snakes[final_pos]  # Move player to snake end
         animation_path.append(snakes[final_pos]) # Add snake end to path
+        
 
 def update_animation():
     global animating, animation_start, animation_current, current_player, dice_value
@@ -244,6 +245,11 @@ def update_animation():
             # Animation complete
             animating = False
             final_pos = players[animation_player]["pos"]
+            
+            # Elimination check: if current player overlaps another player, send the other back to 1
+            for player, data in players.items():
+                if player != animation_player and data["pos"] == final_pos:
+                    players[player]["pos"] = 1
             
             if final_pos >= 100:
                 show_winner(animation_player)
